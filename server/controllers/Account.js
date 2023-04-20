@@ -1,10 +1,6 @@
-/*
-  EXAMPLE - not for actual production
-*/
-
 const models = require('../models');
 
-const { Example } = models;
+const { Account } = models;
 
 const loginPage = (req, res) => res.render('login');
 
