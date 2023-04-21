@@ -1,4 +1,4 @@
-/* NOT FOR ACTUAL PRODUCTION - just an example for models
+/* 
    bcrypt => encrypting passwords
    Mongoose => interacting with our mongo database.
 */
@@ -54,6 +54,11 @@ const AccountSchema = new mongoose.Schema({
     type: Number,
     required: true,
     default: 52,
+  },
+  trustFundClaim: {
+    type: Date,
+    required: true,
+    default: Date(0)
   },
   history: {
     type: Array,

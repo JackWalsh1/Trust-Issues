@@ -1,8 +1,12 @@
 const path = require('path');
+// https://github.com/Izhaki/nodemon-webpack-plugin#readme
+const NodemonPlugin = require('nodemon-webpack-plugin'); 
 
 module.exports = {
     entry: {
         app: './client/maker.jsx',
+        accountPage: './client/accountPage.jsx',
+        gamePortal: './client/gamePortal.jsx',
         login: './client/login.jsx'
     },
     module: {
@@ -24,4 +28,7 @@ module.exports = {
         path: path.resolve(__dirname, 'hosted'),
         filename: '[name]Bundle.js',
     },
+    plugins: [
+        new NodemonPlugin(),
+      ],
 };

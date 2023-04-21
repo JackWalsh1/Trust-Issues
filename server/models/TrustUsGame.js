@@ -1,64 +1,46 @@
-/* NOT FOR ACTUAL PRODUCTION - just an example for models
-   bcrypt => encrypting passwords
-   Mongoose => interacting with our mongo database.
-*/
-const bcrypt = require('bcrypt');
+// Mongoose => interacting with our mongo database.
 const mongoose = require('mongoose');
 
-/* salt => extra data that gets hashed along with the password.
-   saltRounds => number of times we will hash the password and salt.
-*/
-const saltRounds = 10;
+let TrustUsGameModel = {};
 
-let AccountModel = {};
-
-/* username => unique string of alphanumeric characters
-   password => hashed version of the password
-   premium => if account is premium
-   profileImg => binary string of profile img
-   bio => user bio
-   trust => amount of Trust user has
-   history => history of user's past games
-   createdDate => date of account creation
+/* 
+  complete => is the game complete?
+  startDate => when the game started - should be 6 PM
+  potMultipliers => game's 4 pot multipliers
+  potTotals => game's 4 pot totals
+  playerSubmissions => game's player's submissions for endgame submissions
+  playerClaims => game's player's claims - can be lies
 */
-const AccountSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
-    match: /^[A-Za-z0-9_\-.]{1,16}$/,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  premium: {
+const TrustUsGameSchema = new mongoose.Schema({
+  complete: {
     type: Boolean,
-    required: true,
     default: false,
-  },
-  profileImg: {
-    //https://stackoverflow.com/questions/44869479/what-data-type-should-i-use-to-store-an-image-with-mongodb
-    type: Buffer,
     required: true,
-    default: "generic user image to find later"
   },
-  bio: {
-    type: String,
+  startDate: {
+    type: Date,
+    default: Date.now,
     required: true,
-    trim: true,
-    default: "This user doesn't have a bio yet!"
   },
-  trust: {
-    type: Number,
-    required: true,
-    default: 52,
-  },
-  history: {
+  potMultipliers: {
     type: Array,
+    default: [0, 0, 0, 0],
     required: true,
-    default: ["No games yet!"]
+  },
+  potTotals: {
+    type: Array,
+    default: [0, 0, 0, 0],
+    required: true,
+  },
+  playerSubmissions: {
+    type: Array,
+    default: [],
+    required: true
+  },
+  playerClaims: {
+    type: Array,
+    default: [],
+    required: true
   },
   createdDate: {
     type: Date,
@@ -67,31 +49,21 @@ const AccountSchema = new mongoose.Schema({
 });
 
 // Converts a doc to something we can store in redis later on.
-AccountSchema.statics.toAPI = (doc) => ({
-  username: doc.username,
-  _id: doc._id,
+TrustUsGameSchema.statics.toAPI = (doc) => ({
+  startDate: doc.startDate,
 });
 
-// Helper function to hash a password
-AccountSchema.statics.generateHash = (password) => bcrypt.hash(password, saltRounds);
-
-
-AccountSchema.statics.authenticate = async (username, password, callback) => {
-  try {
-    const doc = await AccountModel.findOne({ username }).exec();
-    if (!doc) {
-      return callback();
-    }
-
-    const match = await bcrypt.compare(password, doc.password);
-    if (match) {
-      return callback(null, doc);
-    }
+// done in onload - if next 6 PM EST from game has passed, complete game + address scoring
+TrustUsGameSchema.statics.isGameComplete = (startDate) => {
+  currentDate = Date.now();
+  nextDay.setUTCDate(startDate.getUTCDate() + 1);
+  // if currentDate is past 6 PM and it's at least the next day
+  if (currentDate.getHours() >= 18 && (currentDate > nextDay ) ) {
     return callback();
-  } catch (err) {
+  } else {
     return callback(err);
   }
-};
+}
 
-AccountModel = mongoose.model('Account', AccountSchema);
-module.exports = AccountModel;
+TrustUsGameModel = mongoose.model('TrustUsGame', TrustUsGameSchema);
+module.exports = TrustUsGameModel;
