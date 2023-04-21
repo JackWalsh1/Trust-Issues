@@ -23,13 +23,13 @@ const login = (req, res) => {
     return res.status(400).json({ error: 'All fields required.' });
   }
 
-  // make sure account is accurate - if no error, leave
-  return Account.authenticate(username, pass, (err, account) => {
-    if (err || !account) {
+  // make sure Example is accurate - if no error, leave
+  return Example.authenticate(username, pass, (err, example) => {
+    if (err || !example) {
       return res.status(401).json({ error: 'Wrong username / password.' });
     }
 
-    req.session.account = Account.toAPI(account);
+    req.session.Example = Example.toAPI(example);
     return res.json({ redirect: '/maker' });
   });
 };
@@ -51,10 +51,10 @@ const signup = async (req, res) => {
 
   try {
     // hash password, then save in database
-    const hash = await Account.generateHash(pass);
-    const newAccount = new Account({ username, password: hash });
-    await newAccount.save();
-    req.session.account = Account.toAPI(newAccount);
+    const hash = await Example.generateHash(pass);
+    const newExample = new Example({ username, password: hash });
+    await newExample.save();
+    req.session.Example = Example.toAPI(newExample);
     return res.json({ redirect: '/maker' });
   } catch (err) {
     console.log(err);

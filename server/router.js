@@ -18,8 +18,10 @@ const router = (app) => {
   app.get('/checkForActiveGame', mid.requiresSecure, controllers.TrustUs.checkForActiveGame);
   app.post('/submitPotValues', mid.requiresSecure, mid.requiresLogin, controllers.TrustUs.submitPotValues);
   app.post('/claimPotValues', mid.requiresSecure, mid.requiresLogin, controllers.TrustUs.claimPotValues);
+  app.post('/claimPotValues', mid.requiresSecure, mid.requiresLogin, controllers.TrustUs.resolveGame);
 
-  // app.get('/trustMe', mid.requiresSecure, mid.requiresLogin, mid.accessibleTrustMe, controllers.TrustMe.trustMePage);
+  // app.get('/trustMe', mid.requiresSecure, mid.requiresLogin,
+  // mid.accessibleTrustMe, controllers.TrustMe.trustMePage);
 
   app.get('/logout', controllers.Account.logout);
 

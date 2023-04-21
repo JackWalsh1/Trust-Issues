@@ -48,11 +48,6 @@ const TrustUsGameSchema = new mongoose.Schema({
     default: [],
     required: true,
   },
-  playerClaims: {
-    type: Array,
-    default: [],
-    required: true,
-  },
 });
 
 // Converts a doc to something we can store in redis later on.
@@ -62,13 +57,11 @@ TrustUsGameSchema.statics.toAPI = (doc) => ({
 
 // done in onload - if next 6 PM EST from game has passed, complete game + address scoring
 TrustUsGameSchema.statics.isGameComplete = (startDate) => {
-  currentDate = Date.now();
+  const currentDate = Date.now();
+  let nextDay;
   nextDay.setUTCDate(startDate.getUTCDate() + 1);
   // if currentDate is past 6 PM and it's at least the next day
-  if (currentDate.getHours() >= 18 && (currentDate > nextDay)) {
-    return callback();
-  }
-  return callback(err);
+  return (currentDate.getHours() >= 18 && (currentDate > nextDay));
 };
 
 TrustUsGameModel = mongoose.model('TrustUsGame', TrustUsGameSchema);
