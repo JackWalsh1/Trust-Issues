@@ -15,6 +15,7 @@ const router = (app) => {
   app.post('/makeAccountPremium', mid.requiresSecure, mid.requiresLogin, controllers.GamePortal.makeAccountPremium);
 
   app.get('/trustUs', mid.requiresSecure, mid.requiresLogin, controllers.TrustUs.trustUsPage);
+  app.get('/checkForActiveGame', mid.requiresSecure, controllers.TrustUs.checkForActiveGame);
   app.post('/submitPotValues', mid.requiresSecure, mid.requiresLogin, controllers.TrustUs.submitPotValues);
   app.post('/claimPotValues', mid.requiresSecure, mid.requiresLogin, controllers.TrustUs.claimPotValues);
 

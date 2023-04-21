@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 
 let TrustUsGameModel = {};
 
-/* 
+/*
   complete => is the game complete?
+  gameNumber => what # game it is - essentially an ID
   startDate => when the game started - should be 6 PM
   potMultipliers => game's 4 pot multipliers
   potTotals => game's 4 pot totals
@@ -12,6 +13,12 @@ let TrustUsGameModel = {};
   playerClaims => game's player's claims - can be lies
 */
 const TrustUsGameSchema = new mongoose.Schema({
+  gameNumber: {
+    type: Number,
+    default: 0,
+    required: true,
+    unique: true,
+  },
   complete: {
     type: Boolean,
     default: false,
@@ -24,7 +31,6 @@ const TrustUsGameSchema = new mongoose.Schema({
   },
   potMultipliers: {
     type: Array,
-    default: [0, 0, 0, 0],
     required: true,
   },
   potTotals: {
@@ -35,16 +41,17 @@ const TrustUsGameSchema = new mongoose.Schema({
   playerSubmissions: {
     type: Array,
     default: [],
-    required: true
+    required: true,
   },
   playerClaims: {
     type: Array,
     default: [],
-    required: true
+    required: true,
   },
-  createdDate: {
-    type: Date,
-    default: Date.now,
+  playerClaims: {
+    type: Array,
+    default: [],
+    required: true,
   },
 });
 
@@ -58,12 +65,11 @@ TrustUsGameSchema.statics.isGameComplete = (startDate) => {
   currentDate = Date.now();
   nextDay.setUTCDate(startDate.getUTCDate() + 1);
   // if currentDate is past 6 PM and it's at least the next day
-  if (currentDate.getHours() >= 18 && (currentDate > nextDay ) ) {
+  if (currentDate.getHours() >= 18 && (currentDate > nextDay)) {
     return callback();
-  } else {
-    return callback(err);
   }
-}
+  return callback(err);
+};
 
 TrustUsGameModel = mongoose.model('TrustUsGame', TrustUsGameSchema);
 module.exports = TrustUsGameModel;

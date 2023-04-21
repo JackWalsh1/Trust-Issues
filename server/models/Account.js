@@ -1,4 +1,4 @@
-/* 
+/*
    bcrypt => encrypting passwords
    Mongoose => interacting with our mongo database.
 */
@@ -39,16 +39,16 @@ const AccountSchema = new mongoose.Schema({
     default: false,
   },
   profileImg: {
-    //https://stackoverflow.com/questions/44869479/what-data-type-should-i-use-to-store-an-image-with-mongodb
+    // https://stackoverflow.com/questions/44869479/what-data-type-should-i-use-to-store-an-image-with-mongodb
     type: Buffer,
     required: true,
-    default: "generic user image to find later"
+    default: 'generic user image to find later',
   },
   bio: {
     type: String,
     required: true,
     trim: true,
-    default: "This user doesn't have a bio yet!"
+    default: "This user doesn't have a bio yet!",
   },
   trust: {
     type: Number,
@@ -58,12 +58,12 @@ const AccountSchema = new mongoose.Schema({
   trustFundClaim: {
     type: Date,
     required: true,
-    default: Date(0)
+    default: Date(0),
   },
   history: {
     type: Array,
     required: true,
-    default: ["No games yet!"]
+    default: ['No games yet!'],
   },
   createdDate: {
     type: Date,
@@ -79,7 +79,6 @@ AccountSchema.statics.toAPI = (doc) => ({
 
 // Helper function to hash a password
 AccountSchema.statics.generateHash = (password) => bcrypt.hash(password, saltRounds);
-
 
 AccountSchema.statics.authenticate = async (username, password, callback) => {
   try {

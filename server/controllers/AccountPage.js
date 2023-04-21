@@ -31,7 +31,7 @@ const updateBio = async (req, res) => {
     }
     return res.status(500).json({ error: 'An error occurred!' });
   }
-}
+};
 
 module.exports = {
   accountPage,

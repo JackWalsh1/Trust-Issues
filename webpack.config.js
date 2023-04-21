@@ -7,6 +7,7 @@ module.exports = {
         app: './client/maker.jsx',
         accountPage: './client/accountPage.jsx',
         gamePortal: './client/gamePortal.jsx',
+        trustUs: './client/trustUs.jsx',
         login: './client/login.jsx'
     },
     module: {
