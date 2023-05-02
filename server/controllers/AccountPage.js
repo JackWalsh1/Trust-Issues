@@ -33,7 +33,27 @@ const updateBio = async (req, res) => {
   }
 };
 
+const getUserInfo = async (req, res) => {
+  try {
+    const username = `${req.query.username}`;
+    const doc = await Account.findOne({ username }).exec();
+    if (!doc) {
+      return res.status(400).json({ error: 'Username does not exist.' });
+    }
+    return res.status(200).json({
+      username: doc.username, 
+      bio: doc.bio, 
+      trust: doc.trust, 
+      history: doc.history,
+      premium: doc.premium});
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: 'Username is required.' });
+  }
+};
+
 module.exports = {
   accountPage,
   updateBio,
-};
+  getUserInfo
+}

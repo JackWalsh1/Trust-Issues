@@ -4,7 +4,6 @@ const NodemonPlugin = require('nodemon-webpack-plugin');
 
 module.exports = {
     entry: {
-        app: './client/maker.jsx',
         accountPage: './client/accountPage.jsx',
         gamePortal: './client/gamePortal.jsx',
         trustUs: './client/trustUs.jsx',

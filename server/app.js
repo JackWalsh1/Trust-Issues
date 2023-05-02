@@ -12,6 +12,8 @@ const session = require('express-session');
 const RedisStore = require('connect-redis').default;
 const redis = require('redis');
 
+const multer = require('multer');
+
 const router = require('./router.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
@@ -22,6 +24,13 @@ mongoose.connect(dbURI).catch((err) => {
   if (err) {
     console.log('Could not connect to database');
     throw err;
+  }
+});
+
+const Storage = multer.diskStorage({
+  destination: 'uploads',
+  filename:(req, file, cb) => {
+    cb(null, file.originalname);
   }
 });
 

@@ -37,35 +37,73 @@ const DomoForm = (props) => {
     )
 }
 
-const DomoList = (props) => {
-    if (props.domos.length === 0) {
+const ProfilePic = (props) => {
+    return (
+        <img className='profilePic'
+        alt='profile pic'
+        src='/assets/img/profilePic.png'></img>
+    )
+}
+
+const Username = (props) => {
+    return (
+        <h2 className='username'>
+        {props.username.length !== 0 ? props.username : "loading..."}
+        </h2>
+    )
+}
+
+const TrustValue = (props) => {
+    return (
+        <h2 className='trustValue'>
+        Trust: {props.trustValue.length !== 0 ? props.trustValue : "loading..."}
+        </h2>
+    )
+}
+
+const Bio = (props) => {
+    return (
+        <p className='bio'>
+        {props.bio}
+        </p>
+    )
+}
+
+const GameHistory = (props) => {
+    if (props.games.length === 0) {
         return (
-            <div className='domoList'>
-                <h3 className='emptyDomo'>No Domos yet!</h3>
+            <div className='gameHistory'>
+                <h3 className='emptyGame'>No games yet!</h3>
             </div>
         );
     }
 
-    const DomoNodes = props.domos.map(domo => {
+    const GameNodes = props.games.map(game => {
         return (
-            <div key = {domo._id} className='domo'>
-                <img src='/assets/img/domoface.jpeg' alt="domo face" className='domoFace'></img>
-                <h3 className='domoName'>Name: {domo.name}</h3>
-                <h3 className='domoAge'>Age: {domo.age}</h3>
+            <div key = {game._id} className='game'>
+                <h3 className='gameNum'>Name: {game.num}</h3>
+                <div className='personalHistory'> 
+                <p>Claim: {game.claims[props.username].wasTrue}</p>
+                <p>Profited?: {game.claims[props.username].profited}</p>
+                </div>
             </div>
         )
     });
 
     return (
-        <div className='domoList'>
-            {DomoNodes}
+        <div className='gameHistory'>
+            {GameNodes}
         </div>
     );
 }
 
-const loadDomosFromServer = async () => {
-    const response = await fetch('/getDomos');
+
+
+const loadUserInfo = async () => {
+    const response = await fetch('/getUserInfo');
     const data = await response.json();
+
+    console.log(data);
     ReactDOM.render(
         <DomoList domos={data.domos} />,
         document.querySelector("#domos")
@@ -73,17 +111,7 @@ const loadDomosFromServer = async () => {
 }
 
 const init = () => {
-    ReactDOM.render(
-        <DomoForm />,
-        document.querySelector("#makeDomo")
-    );
-
-    ReactDOM.render(
-        <DomoList domos={[]} />,
-        document.querySelector("#domos")
-    );
-
-    loadDomosFromServer();
+    loadUserInfo();
 }
 
 window.onload = init;

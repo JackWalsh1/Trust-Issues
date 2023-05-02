@@ -8,6 +8,7 @@ const router = (app) => {
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
 
   app.get('/accountPage', mid.requiresSecure, mid.requiresLogin, controllers.AccountPage.accountPage);
+  app.get('/getUserInfo', controllers.AccountPage.getUserInfo);
   app.post('/updateBio', mid.requiresSecure, mid.requiresLogin, controllers.AccountPage.updateBio);
 
   app.get('/gamePortal', mid.requiresSecure, mid.requiresLogin, controllers.GamePortal.gamePortal);

@@ -39,8 +39,9 @@ const AccountSchema = new mongoose.Schema({
     default: false,
   },
   profileImg: {
-    // https://stackoverflow.com/questions/44869479/what-data-type-should-i-use-to-store-an-image-with-mongodb
+    // https://www.youtube.com/watch?v=GyzC-30Bqfc
     type: Buffer,
+    contentType: String,
     required: true,
     default: 'generic user image to find later',
   },

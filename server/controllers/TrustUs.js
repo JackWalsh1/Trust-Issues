@@ -73,7 +73,21 @@ const submitPotValues = (req, res) => {
   return true;
 };
 
-const claimPotValues = () => true;
+const claimPotValues = () => {
+  // get req body variables
+  const username = `${req.body.username}`;
+  const potClaims = `${req.body.potClaims}`;
+  // check if all variables exist / if pass & pass2 match
+  if (!username || potClaims.length !== 4) {
+    return res.status(400).json({ error: 'All fields required.' });
+  }
+
+  if (potValues.reduce((a, b) => a + b, 0) !== 50) {
+    return res.status(400).json({ error: 'Pot values must sum to 50.' });
+  }
+
+  return true;
+};
 
 const resolveGame = () => true;
 
