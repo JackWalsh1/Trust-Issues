@@ -1,8 +1,4 @@
-const handleError = (message) => {
-    document.getElementById('errorMessage').textContent = message;
-    document.getElementById('domoMessage').classList.remove('hidden');
-  };
-  
+
   // sends post and then reacts accordingly based on response
   const sendPost = async (url, data, handler) => {
     const response = await fetch(url, {
@@ -14,14 +10,9 @@ const handleError = (message) => {
     });
   
     const result = await response.json();
-    document.getElementById('domoMessage').classList.add('hidden');
   
     if(result.redirect) {
       window.location = result.redirect;
-    }
-  
-    if(result.error) {
-      handleError(result.error);
     }
 
     if (handler) {
@@ -29,9 +20,6 @@ const handleError = (message) => {
     }
   };
 
-  const hideError = () => {
-    document.querySelector("#domoMessage").classList.add('hidden');
-  }
 
   const delay = (delayInms) => {
     return new Promise((resolve) => {
@@ -43,8 +31,6 @@ const handleError = (message) => {
   }
 
   module.exports = {
-    handleError,
     sendPost,
-    hideError,
     delay
   }

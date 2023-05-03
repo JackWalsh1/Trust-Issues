@@ -10,7 +10,6 @@ const checkIfNewDay = () => {
 
 const handleTrustFund = (e) => {
     e.preventDefault();
-    helper.hideError();
     helper.sendPost(e.target.action);
 
     return false;
@@ -18,7 +17,6 @@ const handleTrustFund = (e) => {
 
 const handleTrustMe = (e) => {
     e.preventDefault();
-    helper.hideError();
 
     const trustSubmitted = document.querySelector("#trustSubmitted");
 
@@ -34,7 +32,6 @@ const handleTrustMe = (e) => {
 
 const handleTrustUs = (e) => {
     e.preventDefault();
-    helper.hideError();
     helper.sendPost(e.target.action);
 
     return false;
@@ -42,7 +39,6 @@ const handleTrustUs = (e) => {
 
 const handleSecretCode = (e) => {
     e.preventDefault();
-    helper.hideError();
 
     const secretCode = document.querySelector("#secretCode");
 
