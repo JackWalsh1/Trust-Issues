@@ -25,6 +25,7 @@ module.exports = {
         aggregateTimeout: 200,
     },
     output: {
+        globalObject: "this",
         path: path.resolve(__dirname, 'hosted'),
         filename: '[name]Bundle.js',
     },

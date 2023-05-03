@@ -33,8 +33,18 @@ const handleError = (message) => {
     document.querySelector("#domoMessage").classList.add('hidden');
   }
 
+  const delay = (delayInms) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, delayInms);
+    });
+  
+  }
+
   module.exports = {
     handleError,
     sendPost,
-    hideError
+    hideError,
+    delay
   }

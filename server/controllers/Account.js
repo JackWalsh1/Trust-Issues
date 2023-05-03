@@ -18,6 +18,7 @@ const login = (req, res) => {
   if (!username || !pass) {
     return res.status(400).json({ error: 'All fields required.' });
   }
+  debugger;
 
   // make sure account is accurate - if no error, leave
   return Account.authenticate(username, pass, (err, account) => {
@@ -25,8 +26,9 @@ const login = (req, res) => {
       return res.status(401).json({ error: 'Wrong username / password.' });
     }
 
+    console.log(req.session.account);
     req.session.account = Account.toAPI(account);
-    return res.json({ redirect: '/accountPage' });
+    return res.json({ redirect: '/login' });
   });
 };
 

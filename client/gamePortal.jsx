@@ -2,88 +2,171 @@ const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-const handleDomo = (e) => {
-    
+let trustFundClaimTime;
+
+const checkIfNewDay = () => {
+    return Date.now() - trustFundClaimTime - 86400000 >= 0;
+}
+
+const handleTrustFund = (e) => {
     e.preventDefault();
     helper.hideError();
-
-    const name = e.target.querySelector('#domoName').value;
-    const age = e.target.querySelector('#domoAge').value;
-
-    if (!name || !age) {
-        helper.handleError({ error: 'Both age / name are required!' });
-    }
-
-    helper.sendPost(e.target.action, {name, age}, loadDomosFromServer);
+    helper.sendPost(e.target.action);
 
     return false;
 }
 
-const DomoForm = (props) => {
+const handleTrustMe = (e) => {
+    e.preventDefault();
+    helper.hideError();
+
+    const trustSubmitted = document.querySelector("#trustSubmitted");
+
+    if (!trustSubmitted || trustSubmitted < 2) {
+        helper.handleError('Submit a trust value that is at least 2.');
+        return false;
+    }
+
+    helper.sendPost(e.target.action, {trustSubmitted});
+
+    return false;
+}
+
+const handleTrustUs = (e) => {
+    e.preventDefault();
+    helper.hideError();
+    helper.sendPost(e.target.action);
+
+    return false;
+}
+
+const handleSecretCode = (e) => {
+    e.preventDefault();
+    helper.hideError();
+
+    const secretCode = document.querySelector("#secretCode");
+
+    if (!secretCode) {
+        helper.handleError('Submit a trust value..');
+        return false;
+    }
+
+    helper.sendPost(e.target.action);
+
+    return false;
+}
+
+const TrustMe = (props) => {
     return (
-        <form id="domoForm"
-            name="domoForm"
-            onSubmit={handleDomo}
-            action="/maker"
+        <form id="trustMe"
+            name="trustMeForm"
+            onSubmit={handleTrustMe}
+            action="/trustMe"
             method="POST"
-            className="domoForm"
+            className="mainForm"
         >
-            <label htmlFor='name'>Name: </label>
-            <input id='domoName' type='text' name='name' placeholder='Domo Name'/>
-            <label htmlFor='age'>Age: </label>
-            <input id='domoAge' type='number' min='0' name='age'/>
-            <input className='makeDomoSubmit' type='submit' value='Make Domo'/>
+            <label htmlFor='trustSubmitted'>Trust Submitted: </label>
+            <input id='trustSubmitted' type='number' name='Trust Submission' placeholder='2'/>
+            <input className='formSubmit' type='submit' value='Start Game'/>
         </form>
     )
 }
 
-const DomoList = (props) => {
-    if (props.domos.length === 0) {
-        return (
-            <div className='domoList'>
-                <h3 className='emptyDomo'>No Domos yet!</h3>
-            </div>
-        );
-    }
-
-    const DomoNodes = props.domos.map(domo => {
-        return (
-            <div key = {domo._id} className='domo'>
-                <img src='/assets/img/domoface.jpeg' alt="domo face" className='domoFace'></img>
-                <h3 className='domoName'>Name: {domo.name}</h3>
-                <h3 className='domoAge'>Age: {domo.age}</h3>
-            </div>
-        )
-    });
-
+const TrustUs = (props) => {
     return (
-        <div className='domoList'>
-            {DomoNodes}
-        </div>
-    );
+        <form id="trustUs"
+            name="trustUsForm"
+            onSubmit={handleTrustUs}
+            action="/trustUs"
+            method="GET"
+            className="mainForm"
+        >
+            <input className='formSubmit' type='submit' value='Enter Current Game'/>
+        </form>
+    )
 }
 
-const loadDomosFromServer = async () => {
-    const response = await fetch('/getDomos');
+const TrustFund = (props) => {
+    return (
+        <form id="trustFund"
+            name="trustFundForm"
+            onSubmit={handleTrustFund}
+            action="/claimTrustFund"
+            method="POST"
+            className="mainForm"
+        >
+            <input className='formSubmit' id='trustFundButton' type='submit'
+            disabled= {props.clickable}
+            value= {props.clickable ? 'Daily Trust Fund Claimed':
+             'Claim Daily Trust Fund'}/>
+        </form>
+    )
+}
+
+const SecretCodes = (props) => {
+    return (
+        <form id="secretCodeForm"
+            name="secretCodeForm"
+            onSubmit={handleSecretCode}
+            action="/makeAccountPremium"
+            method="POST"
+            className="mainForm"
+        >
+            <label htmlFor='trustSubmitted'>Secret Codes: </label>
+            <input id='secretCode' type='password' name='secretCode' placeholder='you got any codes'/>
+            <input className='formSubmit' type='submit' value='Submit Code'/>
+        </form>
+    )
+}
+
+
+const loadUserInfo = async () => {
+    const response = await fetch(`/getUserInfo?page=gamePortal`);
     const data = await response.json();
+
+    trustFundClaimTime = data.trustFundClaim;
     ReactDOM.render(
-        <DomoList domos={data.domos} />,
-        document.querySelector("#domos")
+        <TrustFund clickable={checkIfNewDay()}/>,
+        document.querySelector("#trustFund")
     );
+
+    const trustFundButton = document.querySelector("#trustFundButton");
+    trustFundButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        trustFundButton.disabled = true;
+        return false;
+    });
+
+    ReactDOM.render(
+        <TrustMe /*this will use data*//>,
+        document.querySelector("#trustMe")
+    );
+
+    return trustFundButton;
+}
+
+const checkTimeChange = async (trustFundButton) => {
+    if (trustFundButton.disabled === true) {
+        if (checkIfNewDay()) {
+            trustFundButton.disabled = false;
+        }
+    }
+
+    await helper.delay(1000);
+    checkTimeChange(trustFundButton);
 }
 
 const init = () => {
     ReactDOM.render(
-        <DomoForm />,
-        document.querySelector("#makeDomo")
+        <TrustUs />,
+        document.querySelector("#trustUs")
     );
-
     ReactDOM.render(
-        <DomoList domos={[]} />,
-        document.querySelector("#domos")
+        <SecretCodes />,
+        document.querySelector("#secretCodes")
     );
-
-    loadDomosFromServer();
+    let trustFundButton = loadUserInfo();
+    checkTimeChange(trustFundButton);
 }
 
 window.onload = init;

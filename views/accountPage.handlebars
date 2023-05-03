@@ -6,17 +6,18 @@
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
 </head>
 <body>
-  <nav><a href="/login"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
+  <nav><a href="/login"><img id="logo" src="/assets/img/favicon.png" alt="face logo"/></a>
     <div class="navlink"><a href="/gamePortal">Game Portal</a></div>
     <div class="navlink"><a href="/logout">Log out</a></div>
   </nav>
 
-<div class="accountPage">
-  <section class="username"></section>
-  <section class="profilePic"></section>
-  <section class="gameHistory"></section>
-  <section class="trustValue"></section>
-  <section class="bio"></section>
+
+<section class="accountPage">
+  <section id="username"></section>
+  <section id="profilePic"></section>
+  <section id="gameHistory"></section>
+  <section id="trustValue"></section>
+  <section id="bio"></section>
 </section>
 
   <div id="domoMessage" class='hidden'>
@@ -24,6 +25,6 @@
     <h3><span id="errorMessage"></span></h3>
     <img id="domo" src="assets/img/domo.png" alt="domo"/>
   </div>
-  <script src="/assets/appBundle.js"></script>
+  <script src="/assets/accountPageBundle.js"></script>
 </body>
 </html>

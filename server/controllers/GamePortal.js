@@ -12,7 +12,7 @@ const claimTrustFund = async (req, res) => {
   if (!username) {
     return res.status(400).json({ error: 'All fields required.' });
   } if (username !== req.session.account.username) {
-    return res.status(403).json({ error: 'User is attempting to change someone else\'s premium status.' });
+    return res.status(403).json({ error: 'User is attempting to change someone else\'s trust fund claim status.' });
   }
 
   try {
