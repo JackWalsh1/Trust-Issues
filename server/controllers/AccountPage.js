@@ -35,26 +35,27 @@ const updateBio = async (req, res) => {
 
 const getUserInfo = async (req, res) => {
   try {
-    const username = req.session.account.username;
-    const page = req.query.page;
+    const { username } = req.session.account;
+    const { page } = req.query;
     const doc = await Account.findOne({ username }).exec();
     if (!doc) {
       return res.status(400).json({ error: 'Username does not exist.' });
     }
-    let resultJSON = {history: doc.history};
+    const resultJSON = { history: doc.history };
     let addedJSON;
     switch (page) {
       case 'accountPage':
         addedJSON = {
-          username: doc.username, 
-          bio: doc.bio, 
-          trust: doc.trust, 
-          premium: doc.premium}
-          break;
+          username: doc.username,
+          bio: doc.bio,
+          trust: doc.trust,
+          premium: doc.premium,
+        };
+        break;
       case 'gamePortal':
-        addedJSON = {trustFundClaim: doc.trustFundClaim};
-      break;
-      default: 
+        addedJSON = { trustFundClaim: doc.trustFundClaim };
+        break;
+      default:
         return res.status(500).json({ error: 'Error in resultJSON switch.' });
     }
     return res.status(200).json(Object.assign(resultJSON, addedJSON));
@@ -67,5 +68,5 @@ const getUserInfo = async (req, res) => {
 module.exports = {
   accountPage,
   updateBio,
-  getUserInfo
-}
+  getUserInfo,
+};

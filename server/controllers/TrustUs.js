@@ -3,7 +3,7 @@ const models = require('../models');
 
 const { TrustUsGame } = models;
 
-const trustUsPage = (req, res) => res.render('login');
+const trustUsPage = (res) => res.render('login');
 
 const createNewTrustUsGame = async (res) => {
   const gameData = {
@@ -39,7 +39,7 @@ const createNewTrustUsGame = async (res) => {
   return res.status(500).json({ error: 'Fell out of try/catch' });
 };
 
-const checkForActiveGame = async (req, res) => {
+const checkForActiveGame = async (res) => {
   try {
     const query = { complete: false };
     const docs = await TrustUsGame.find(query).lean().exec();
@@ -73,7 +73,7 @@ const submitPotValues = (req, res) => {
   return true;
 };
 
-const claimPotValues = () => {
+const claimPotValues = (req, res) => {
   // get req body variables
   const username = `${req.body.username}`;
   const potClaims = `${req.body.potClaims}`;
@@ -82,7 +82,7 @@ const claimPotValues = () => {
     return res.status(400).json({ error: 'All fields required.' });
   }
 
-  if (potValues.reduce((a, b) => a + b, 0) !== 50) {
+  if (potClaims.reduce((a, b) => a + b, 0) !== 50) {
     return res.status(400).json({ error: 'Pot values must sum to 50.' });
   }
 

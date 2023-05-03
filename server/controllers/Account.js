@@ -18,7 +18,6 @@ const login = (req, res) => {
   if (!username || !pass) {
     return res.status(400).json({ error: 'All fields required.' });
   }
-  debugger;
 
   // make sure account is accurate - if no error, leave
   return Account.authenticate(username, pass, (err, account) => {
